@@ -2,14 +2,23 @@ class Series:
     def __init__(self, data):
         if type(data) == dict:
             self.data = list(data.values())
+            self.key = list(data.keys()) 
+
         elif type(data) == list:
             self.data = data
+            self.key = None
+
         else:
             raise TypeError("Series accepts list or dict")
         
     def mean(self):
         return sum(self.data) / len(self.data)
-
+    
+    def index(self):
+        if self.key is not None:
+            return self.key
+        else:
+            return list(range(len(self.data)))
 
 class Dataframe:
     def __init__(self, data):
@@ -26,3 +35,5 @@ class Dataframe:
             rsl[c] = sum(valus) / len(valus)
         return rsl
         
+    def index(self):
+        return list(range(len(self.data)))
