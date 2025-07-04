@@ -19,6 +19,21 @@ class Series:
             return self.key
         else:
             return list(range(len(self.data)))
+        
+
+
+# decoration function that takes another method
+def skip_if_empty(m):
+    # inner function that checks if the object is empty or not
+    def checker_is_empty(self, *args, **kwargs):
+        # this condition gives you None if the object is empyt
+        if self.empty:
+            return None
+        # if the object is not empty call the function and skip this function
+        return m(self, *args, **kwargs)
+    # return the inner function 
+    return checker_is_empty
+
 
 class Dataframe:
     def __init__(self, data):
@@ -36,19 +51,22 @@ class Dataframe:
             self.colunms = list(cols)
             self.empty = len(self.colunms) == 0
     
+    @ skip_if_empty
     #  return the frist h number of rows
     def head(self, h=5):
         return self.data[:h]
     
+    @ skip_if_empty
     # return the last t number of rows
     def tail(self, t=5):
         return self.data[-t:]
 
+    @ skip_if_empty
     #  calculat mean or averge for data
     def mean(self):
         rsl = {} # stor the result for each column
 
-        for c in self.columns: # To through each column
+        for c in self.colunms: # To through each column
             valus = []
             for element in self.data:
                 if c in element and type(element[c]) in [int, float]:
@@ -57,10 +75,11 @@ class Dataframe:
                 rsl[c] = sum(valus) / len(valus) 
         return rsl
     
-     # calculat sum for data
+    @ skip_if_empty
+    # calculat sum for data
     def sum(self):
         rsl = {}
-        for c in self.columns:  # To through each column
+        for c in self.colunms:  # To through each column
                 total = 0
                 for element in self.data:  # To through each row
                     val = element.get(c)
@@ -69,30 +88,33 @@ class Dataframe:
                 rsl[c] = total # stor teh total sum for this column
         return rsl
     
+    @ skip_if_empty
     # to give you the minmum value in columns
     def min(self):
         rsl = {}
-        for c in self.columns:
+        for c in self.colunms:
             # to get numeric values in column "c", skip row if "c" doesn't exist
             values = [element[c] for element in self.data if c in element and type(element[c]) in [int, float]]  
             if values: # check if values is not empty
                 rsl[c] = min(values)
         return rsl
     
+    @ skip_if_empty
     #  to give you the maxmum value in columns
     def max(self):
         rsl = {}
-        for c in self.columns:
+        for c in self.colunms:
             # to get numeric values in column "c", skip row if "c" doesn't exist
             values = [element[c] for element in self.data if c in element and type(element[c]) in [int, float]]
             if values: # check if values is not empty
                 rsl[c] = max(values)
         return rsl
     
+    @ skip_if_empty
     # to count how many values not equal None in each column
     def count(self):
         rsl = {}
-        for c in self.columns:
+        for c in self.colunms:
             count = 0
             for element in self.data:
                 if c in element and element[c] is not None: # to check the key exist and the values is not None
@@ -104,7 +126,7 @@ class Dataframe:
     # return the shape of data in (rows, columns)
     def shape(self):
         rows = len(self.data)
-        columns = len(self.columns)
+        columns = len(self.colunms)
         return (rows, columns)
     
     # return a list of index numbers of the rows
@@ -113,16 +135,16 @@ class Dataframe:
     
     # return the coulmns names
     def columns_(self):
-        return self.columns
+        return self.colunms
 
 data = [
-    {},
+    {"a": 1},
     {},
     {}
     ]
 df = Dataframe(data)
-print(f"Head for data is: {df.head(2)}")
-print(f"Tail for data is: {df.tail(2)}")
+print(f"Head for data is: {df.head()}")
+print(f"Tail for data is: {df.tail()}")
 print(f"Mean for data is: {df.mean()}")
 print(f"sum for data is: {df.sum()}")
 print(f"The minmum number of data is: {df.min()}")
