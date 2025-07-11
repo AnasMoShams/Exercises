@@ -231,5 +231,5 @@ df.display()
 #         print("     ".join(rows))
 
 
-# display(["a", "b", "c"], [[1, 2, 3], [4, 5, 6]])
+
 
