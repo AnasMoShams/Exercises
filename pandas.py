@@ -1,5 +1,6 @@
 from collections import Counter
 import numpy as np 
+
 class Series:
     def __init__(self, data, _index=None):
         self.data = data
@@ -98,10 +99,10 @@ class Dataframe:
             self.columns = data[0] if columns == None else columns 
 
     def head(self, h=5):
-        return (f"\n{self.columns[:h]} \n{self.data[:h]}")
+        return  f"\n{self.columns[:h]}\n{self.data[:h]}" 
 
     def tail(self, t=5):
-        return(f"\n{self.columns[-t:]} \n{self.data[-t:]}")
+        return f"\n{self.columns[-t:]} \n{self.data[-t:]}"
     
     def mean(self):
         rsl = []
@@ -115,8 +116,16 @@ class Dataframe:
         # for _ in self.data:
         #     rsl.append(max(_))
         # return max(rsl)
-        return max(sum(self.data, []))
-    
+        # return max(sum(self.data, []))
+        # x = np.array(self.data)
+        # return x.max()
+        num = float("-inf")
+        for i in self.data:
+            for _ in i:
+                num = max(num, _)
+        return num
+
+
     def min(self):
         # counter = 0
         # rsl = []
@@ -124,7 +133,15 @@ class Dataframe:
         #     rsl.append(min(self.data[counter]))
         #     counter += 1   
         # return min(rsl)  
-        return min(sum(self.data, []))
+        # return min(sum(self.data, []))
+        # x = np.array(self.data)
+        # return x.min()
+        num = float("inf")
+        for i in self.data:
+            for _ in i:
+                num = min(num, _)
+        return num
+
     
     def median(self):
         rsl = []
@@ -167,25 +184,32 @@ class Dataframe:
                 raise TypeError("the length of data is bigger than length of columns")
         return self.columns, self.data
     
-    def display(self):
+    def __str__(self): # __str__ for users , __repr__ for programmers
         self.columns, self.data = self.__length()
         rsl = {}
+
         for i, col in enumerate(self.columns):
             values = []
+
             for element in self.data:
                 values.append(element[i])
+
             rsl[col] = values
             
-        print("     ".join(rsl.keys()))
-
+        output = "     ".join(rsl.keys()) + "\n"
+        
         for i in range(len(next(iter(rsl.values())))):
             rows = []
+
             for _ in rsl:
                 rows.append(str(rsl[_][i]))
-            print("     ".join(rows))
+            
+            output += "     ".join(rows) + "\n"
+        
+        return output.strip()
 
     
-df = Dataframe(["a", "B", "c"],[[1, 2, 10], [4, 5, 6], [7, 8, 120]])
+df = Dataframe(["a", "B", "c"],[[1, 2], [4, 5, 6], [7, 8, 120]])
 print("The Head for data with name of columns",df.head(2))
 print("The Tail for data with name of columns",df.tail(2))
 print("The mean of data",df.mean())
@@ -196,7 +220,7 @@ print("The length of data", df.count())
 print("The Shape of Data Frame", df.shape()) 
 print("index", df.index()) 
 print("Your DataFram ")
-df.display() 
+print(df)
 
 
 # def length(columns, data):
@@ -231,5 +255,5 @@ df.display()
 #         print("     ".join(rows))
 
 
-
+# display(["a", "b", "c"], [[1, 2, 3], [4, 5, 6]])
 
