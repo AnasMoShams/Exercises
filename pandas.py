@@ -184,7 +184,7 @@ class Dataframe:
                 raise TypeError("the length of data is bigger than length of columns")
         return self.columns, self.data
     
-    def __str__(self): # __str__ for users , __repr__ for programmers
+    def __repr__(self): # __str__ for users , __repr__ for programmers
         self.columns, self.data = self.__length()
         rsl = {}
 
