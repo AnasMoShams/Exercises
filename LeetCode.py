@@ -349,23 +349,42 @@
 #                 return True
 #         return False
 
-# #  Test 
-# node1 = Node(1)
-# node2 = Node(2)
-# node3 = Node(3)
-# node4 = Node(4)
-# node1.next = node2
-# node2.next = node3
-# node3.next = node4
-# solution = Solution()
-# print(solution.hasCycle(node1))
 
-# node1 = Node(1)
-# node2 = Node(2)
-# node3 = Node(3)
-# node4 = Node(4)
-# node1.next = node2
-# node2.next = node3
-# node3.next = node4
-# node4.next = node2 
-# print(solution.hasCycle(node1))
+# #Solution of Puzzel https://leetcode.com/problems/valid-anagram/description/?envType=problem-list-v2&envId=hash-table
+class Solution(object): 
+    def isAnagram(self, s, t):
+            # O(n)
+        if len(s) != len(t): 
+            return False
+            # Store letters in a dictionary with value zero
+        dic = {chr(i):0 for i in range(ord("a"), ord("z") + 1)}
+            # loops to know how many times the letter is repeated
+        for letter in s :
+            dic[letter] += 1
+        for letter2 in t:
+            dic[letter2] -= 1
+            # Check if all values in the dictionary are zero or not 
+        return (all(v ==0 for v in dic.values()))
+            # O(n log(n))
+        # return sorted(s) == sorted(t) 
+class Solution(object):
+    def isIsomorphic(self, s, t):
+        if len(s) != len(t):
+            return False
+        s_to_t = {}
+        used_t = set()
+
+        for char_s, char_t in zip(s, t):
+            if char_s not in s_to_t:
+                if char_t in used_t:
+                    return False
+                s_to_t[char_s] = char_t
+                used_t.add(char_t)
+            else:
+                if s_to_t[char_s] != char_t:
+                    return False
+        return True
+    # # Solution form Leetcode
+    # def isIsomorphic(self, s, t):
+    #     zipped_set = set(zip(s, t))
+    #     return len(zipped_set) == len(set(s)) == len(set(t))
